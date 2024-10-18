@@ -4,7 +4,7 @@ const pluginEleventyNavigation = require("@11ty/eleventy-navigation");
 const pluginSitemap = require("@quasibit/eleventy-plugin-sitemap");
 const pluginMinifier = require("@sherby/eleventy-plugin-files-minifier");
 const pluginCritical = require("eleventy-critical-css");
-const pluginImage = require("eleventy-plugin-img2picture");
+const eleventyPluginSharpImages = require("@codestitchofficial/eleventy-plugin-sharp-images");
 
 // Config Imports
 const configSitemap = require("./src/config/plugins/sitemap");
@@ -34,9 +34,10 @@ module.exports = function (eleventyConfig) {
   // https://github.com/quasibit/eleventy-plugin-sitemap
   eleventyConfig.addPlugin(pluginSitemap, configSitemap);
 
-  // Converts <img> tags to responsive <picture>s. An opt-in feature. Please read config/plugins/image.js to find out more
-  // https://github.com/saneef/eleventy-plugin-img2picture
-  // eleventyConfig.addPlugin(pluginImage, configImage)
+  eleventyConfig.addPlugin(eleventyPluginSharpImages, {
+    urlPath: "/assets/images",
+    outputDir: "public/assets/images",
+  });
 
   // Production only plugins. Only run when "npm run build" is used.
   if (isProduction) {
@@ -54,11 +55,9 @@ module.exports = function (eleventyConfig) {
    *      Copy/paste non-template files straight to /public, without any interference from the eleventy engine
    *      https://www.11ty.dev/docs/copy/
    */
-  eleventyConfig.addPassthroughCopy("./src/assets/css"); // CS-TODO - For optimization branch, remove CSS passthrough
   eleventyConfig.addPassthroughCopy("./src/assets/favicons");
   eleventyConfig.addPassthroughCopy("./src/assets/fonts");
   eleventyConfig.addPassthroughCopy("./src/assets/images");
-  eleventyConfig.addPassthroughCopy("./src/assets/js"); // CS-TODO - For optimization branch, remove JS passthrough
   eleventyConfig.addPassthroughCopy("./src/assets/svgs");
 
   /**
